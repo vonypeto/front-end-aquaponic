@@ -1,0 +1,3 @@
+/api/\* https://aquaponic.onrender.com/api/:splat 200
+
+https://aquaponic.onrender.com

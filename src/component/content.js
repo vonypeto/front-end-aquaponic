@@ -1,13 +1,126 @@
-import React, { useState } from "react";
-import { Layout, Card, Row, Col, Button } from "antd";
+import React, { useState, useEffect, useRef } from "react";
+import { Layout, Card, Row, Col, Button, Table } from "antd";
 import DynamicMultiSeriesChart from "./chart";
 import { BulbFilled } from "@ant-design/icons";
 import Gauge from "./gauge";
+import Moment from "moment";
+import axios from "axios";
 const { Content } = Layout;
 const { Meta } = Card;
-const ContentData = () => {
-  const [value, setValue] = useState(60);
+function useInterval(callback, delay) {
+  const savedCallback = useRef();
 
+  // Remember the latest callback.
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  // Set up the interval.
+  useEffect(() => {
+    let id = setInterval(() => {
+      savedCallback.current();
+    }, delay);
+    return () => clearInterval(id);
+  }, [delay]);
+}
+
+const timeSince = (date) => {
+  var time = new Date(date);
+  const formatDate = Moment(time).format("lll");
+  return formatDate;
+};
+const ContentData = () => {
+  const result = 6;
+  const start = useState(0);
+  const [value, setValue] = useState(60);
+  const [arrayTable, setArrayTable] = useState([]);
+  const [current, setCurrent] = useState(0);
+  const [currentRow, setCurrentRow] = useState([]);
+  const [phLeveling, setPhLeveling] = useState([]);
+
+  const getData = async () => {
+    try {
+      axios.get(`/api/get_data?result=${6}&start=${0}`).then((res) => {
+        const data = JSON.parse(res.data);
+        console.log(arrayTable);
+
+        if (data.data_sensors[0]?._id === current) return console.log(true);
+        else {
+          console.log(currentRow.length === undefined);
+          if (currentRow.length === undefined) {
+            let currentDataRow = arrayTable;
+            setCurrent(data.data_sensors?._id);
+            currentDataRow.unshift(data.data_sensors);
+            setCurrentRow(data.data_sensors);
+
+            setArrayTable(currentDataRow);
+          } else {
+            console.log(data.data_sensors);
+
+            var ids = new Set(arrayTable.map((d) => d._id));
+            let newData = data?.data_sensors;
+            console.log(arrayTable);
+            var merged = { ...arrayTable, ...newData };
+            var result = Object.keys(merged).map((key) => {
+              return merged[key];
+            });
+            console.log(result);
+            let phLevelingData = result.map((data, i) => {
+              return {
+                x: new Date(data.createdAt),
+                y: Number(data.ph_leveling),
+              };
+            });
+            setPhLeveling(phLevelingData);
+            setCurrent(data.data_sensors[0]?._id);
+            setCurrentRow(data.data_sensors[0]);
+            setArrayTable(result);
+          }
+        }
+        // if (data.data_sensors.length) {
+        //   setStart(start + result);
+        // }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useInterval(() => {
+    getData();
+  }, 4000);
+  const columns = [
+    {
+      title: "Ph Leveling",
+      dataIndex: "ph_leveling",
+      key: "ph_leveling",
+      render: (_, elm) => <div>{elm.ph_leveling} pH</div>,
+    },
+    {
+      title: "Temperature",
+      dataIndex: "temperature",
+      key: "temperature",
+      render: (_, elm) => (
+        <div>
+          {elm.temperature} {String.fromCharCode(8451)}
+        </div>
+      ),
+    },
+    {
+      title: "TDS",
+      dataIndex: "tds",
+      key: "tds",
+      render: (_, elm) => <div>{elm.tds} PPM</div>,
+    },
+    {
+      title: "Date",
+      dataIndex: "actions",
+      render: (_, elm) => <div>{timeSince(elm.createdAt)}</div>,
+    },
+  ];
+  // useEffect(() => {
+  //   getData();
+  // });
   return (
     <div>
       <Content
@@ -65,7 +178,11 @@ const ContentData = () => {
                 >
                   <Meta title="Ph Leveling Sensor" />
                   <p className="mt-2">
-                    Current Status: <b style={{ color: "red" }}>21321</b>
+                    <b style={{ color: "red" }}>{currentRow?.ph_leveling} pH</b>{" "}
+                    from{" "}
+                    {Moment(new Date(currentRow?.createdAt))
+                      .startOf("minute")
+                      .fromNow()}
                   </p>
                 </Card>
               </Col>
@@ -78,7 +195,13 @@ const ContentData = () => {
                 >
                   <Meta title="Temperature Sensor" />
                   <p className="mt-2">
-                    Current Status: <b style={{ color: "red" }}>12321</b>
+                    <b style={{ color: "red" }}>
+                      {currentRow?.temperature} {String.fromCharCode(8451)}
+                    </b>{" "}
+                    from{" "}
+                    {Moment(new Date(currentRow?.createdAt))
+                      .startOf("minute")
+                      .fromNow()}
                   </p>
                 </Card>
               </Col>
@@ -91,7 +214,10 @@ const ContentData = () => {
                 >
                   <Meta title="TDS Sensor" />
                   <p className="mt-2">
-                    Current Status: <b style={{ color: "red" }}>1241</b>
+                    <b style={{ color: "red" }}>{currentRow?.tds} PPM</b> from{" "}
+                    {Moment(new Date(currentRow?.createdAt))
+                      .startOf("minute")
+                      .fromNow()}
                   </p>
                 </Card>
               </Col>
@@ -107,7 +233,9 @@ const ContentData = () => {
                   <Row>
                     <Col xs={19} sm={19} md={19} lg={19} xl={19}>
                       <p className="mt-2">
-                        Current Status: <b style={{ color: "red" }}> On</b>{" "}
+                        <b style={{ color: "red" }}>
+                          {currentRow?.led_status ? `On` : `Off`}
+                        </b>
                       </p>
                     </Col>
                     <Col xs={5} sm={5} md={5} lg={5} xl={5}>
@@ -138,9 +266,23 @@ const ContentData = () => {
           </Col>
           <Col xs={24} sm={24} md={24} lg={24} xl={15}>
             <Card hoverable className="shadow-box">
-              <DynamicMultiSeriesChart />
+              <DynamicMultiSeriesChart phLeveling={phLeveling} />
+            </Card>
+            <Card hoverable className="shadow-box">
+              <Table
+                rowKey="_id"
+                dataSource={arrayTable}
+                columns={columns}
+                pagination={{
+                  defaultPageSize: 10,
+                  showSizeChanger: true,
+                  pageSizeOptions: ["10", "20", "30"],
+                }}
+              />
+              ;
             </Card>
           </Col>
+          <Col xs={24} sm={24} md={24} lg={24} xl={15}></Col>
         </Row>
       </Content>
     </div>
