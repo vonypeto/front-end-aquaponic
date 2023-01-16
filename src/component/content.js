@@ -104,7 +104,7 @@ const ContentData = () => {
 
   useInterval(() => {
     getData();
-  }, 4000);
+  }, 7500);
   const columns = [
     {
       title: "Ph Leveling",
@@ -249,6 +249,8 @@ const ContentData = () => {
                   <Row>
                     <Col xs={19} sm={19} md={19} lg={19} xl={19}>
                       <p className="mt-2">
+                        {" "}
+                        Current Status:{" "}
                         <b style={{ color: "red" }}>
                           {currentRow?.led_status ? `On` : `Off`}
                         </b>
