@@ -37,6 +37,8 @@ const ContentData = () => {
   const [current, setCurrent] = useState(0);
   const [currentRow, setCurrentRow] = useState([]);
   const [phLeveling, setPhLeveling] = useState([]);
+  const [tds, setTds] = useState([]);
+  const [temperature, setTemperature] = useState([]);
 
   const getData = async () => {
     try {
@@ -57,7 +59,6 @@ const ContentData = () => {
           } else {
             console.log(data.data_sensors);
 
-            var ids = new Set(arrayTable.map((d) => d._id));
             let newData = data?.data_sensors;
             console.log(arrayTable);
             var merged = { ...arrayTable, ...newData };
@@ -72,6 +73,21 @@ const ContentData = () => {
               };
             });
             setPhLeveling(phLevelingData);
+            let tdsData = result.map((data, i) => {
+              return {
+                x: new Date(data.createdAt),
+                y: Number(data.tds),
+              };
+            });
+            let temperatureData = result.map((data, i) => {
+              return {
+                x: new Date(data.createdAt),
+                y: Number(data.temperature),
+              };
+            });
+            setPhLeveling(phLevelingData);
+            setTds(tdsData);
+            setTemperature(temperatureData);
             setCurrent(data.data_sensors[0]?._id);
             setCurrentRow(data.data_sensors[0]);
             setArrayTable(result);
@@ -266,7 +282,11 @@ const ContentData = () => {
           </Col>
           <Col xs={24} sm={24} md={24} lg={24} xl={15}>
             <Card hoverable className="shadow-box">
-              <DynamicMultiSeriesChart phLeveling={phLeveling} />
+              <DynamicMultiSeriesChart
+                temperature={temperature}
+                phLeveling={phLeveling}
+                tds={tds}
+              />
             </Card>
             <Card hoverable className="shadow-box">
               <Table

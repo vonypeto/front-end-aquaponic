@@ -5,7 +5,7 @@ import { Divider, Tag } from "antd";
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 const SplineChart = (props) => {
-  const { phLeveling } = props;
+  const { phLeveling, tds, temperature } = props;
   console.log(phLeveling);
   const options = {
     animationEnabled: true,
@@ -27,16 +27,28 @@ const SplineChart = (props) => {
         type: "spline",
         dataPoints: phLeveling,
       },
+      {
+        yValueFormatString: "",
+        xValueFormatString: "MMMM D YYYY, h:mm:ss ",
+        type: "spline",
+        dataPoints: temperature,
+      },
+      {
+        yValueFormatString: "",
+        xValueFormatString: "MMMM D YYYY, h:mm:ss ",
+        type: "spline",
+        dataPoints: tds,
+      },
     ],
   };
 
   return (
     <div style={{ height: "100%" }}>
       <div>
-        <Tag color="magenta" className="rounded">
+        <Tag color="red" className="rounded">
           TDS
         </Tag>
-        <Tag color="red" className="rounded">
+        <Tag color="green" className="rounded">
           Temperature
         </Tag>
         <Tag color="blue" className="rounded">
