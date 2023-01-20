@@ -39,13 +39,14 @@ const ContentData = () => {
   const [phLeveling, setPhLeveling] = useState([]);
   const [tds, setTds] = useState([]);
   const [temperature, setTemperature] = useState([]);
+  const [ledStatus, setLedStatus] = useState(false);
 
   const getData = async () => {
     try {
       axios.get(`/api/get_data?result=${6}&start=${0}`).then((res) => {
         const data = JSON.parse(res.data);
-        console.log(arrayTable);
-
+        console.log(data);
+        setLedStatus(data?.led_status);
         if (data.data_sensors[0]?._id === current) return console.log(true);
         else {
           console.log(currentRow.length === undefined);
@@ -252,7 +253,8 @@ const ContentData = () => {
                         {" "}
                         Current Status:{" "}
                         <b style={{ color: "red" }}>
-                          {currentRow?.led_status ? `On` : `Off`}
+                          {console.log(currentRow)}
+                          {ledStatus ? `On` : `Off`}
                         </b>
                       </p>
                     </Col>
@@ -261,7 +263,7 @@ const ContentData = () => {
                         icon={<BulbFilled />}
                         size={"middle"}
                         type="text"
-                        style={{ color: "green" }}
+                        style={{ color: `${ledStatus ? `green` : `null`}}` }}
                       ></Button>
                     </Col>
                   </Row>

@@ -46,10 +46,10 @@ const SplineChart = (props) => {
     <div style={{ height: "100%" }}>
       <div>
         <Tag color="red" className="rounded">
-          TDS
+          Temperature
         </Tag>
         <Tag color="green" className="rounded">
-          Temperature
+          TDS
         </Tag>
         <Tag color="blue" className="rounded">
           Ph Leveling
