@@ -258,12 +258,13 @@ const ContentData = () => {
                         </b>
                       </p>
                     </Col>
+                    {console.log(ledStatus ? `green` : `null`)}
                     <Col xs={5} sm={5} md={5} lg={5} xl={5}>
                       <Button
                         icon={<BulbFilled />}
                         size={"middle"}
                         type="text"
-                        style={{ color: `${ledStatus ? `green` : `null`}}` }}
+                        style={{ color: `${ledStatus ? `green` : `null`}` }}
                       ></Button>
                     </Col>
                   </Row>
