@@ -40,32 +40,45 @@ const ContentData = () => {
   const [tds, setTds] = useState([]);
   const [temperature, setTemperature] = useState([]);
   const [ledStatus, setLedStatus] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const getData = async () => {
+  const getData = async (handleLoading) => {
     try {
       axios.get(`/api/get_data?result=${6}&start=${0}`).then((res) => {
         const data = JSON.parse(res.data);
         console.log(data);
         setLedStatus(data?.led_status);
+        console.log(current);
         if (data.data_sensors[0]?._id === current) return console.log(true);
         else {
           console.log(currentRow.length === undefined);
-          if (currentRow.length === undefined) {
+          if (
+            Array.isArray(currentRow) &&
+            currentRow.length === 1 &&
+            currentRow[0].length === 0
+          ) {
             let currentDataRow = arrayTable;
             setCurrent(data.data_sensors?._id);
             currentDataRow.unshift(data.data_sensors);
             setCurrentRow(data.data_sensors);
-
+            console.log("single data");
+            console.log(currentDataRow);
             setArrayTable(currentDataRow);
+            handleLoading();
           } else {
-            console.log(data.data_sensors);
+            console.log("multiple single data");
 
             let newData = data?.data_sensors;
             console.log(arrayTable);
-            var merged = { ...arrayTable, ...newData };
-            var result = Object.keys(merged).map((key) => {
-              return merged[key];
-            });
+            //   var merged = arrayTable.concat(newData);
+
+            let result = arrayTable.concat(newData).reduce((acc, current) => {
+              const x = acc.find((item) => item._id === current._id);
+              if (!x) {
+                acc.unshift(current);
+              }
+              return acc;
+            }, []);
             console.log(result);
             let phLevelingData = result.map((data, i) => {
               return {
@@ -92,6 +105,7 @@ const ContentData = () => {
             setCurrent(data.data_sensors[0]?._id);
             setCurrentRow(data.data_sensors[0]);
             setArrayTable(result);
+            handleLoading();
           }
         }
         // if (data.data_sensors.length) {
@@ -102,9 +116,11 @@ const ContentData = () => {
       console.log(error);
     }
   };
-
+  const handleLoading = () => {
+    setIsLoading(false);
+  };
   useInterval(() => {
-    getData();
+    getData(handleLoading);
   }, 7500);
   const columns = [
     {
@@ -188,6 +204,7 @@ const ContentData = () => {
             <Row gutter={12}>
               <Col xs={12} sm={12} md={12} lg={12} xl={12}>
                 <Card
+                  loading={isLoading}
                   hoverable
                   className="shadow-box"
                   style={{ width: "99.5%" }}
@@ -205,6 +222,7 @@ const ContentData = () => {
               </Col>
               <Col xs={12} sm={12} md={12} lg={12} xl={12}>
                 <Card
+                  loading={isLoading}
                   hoverable
                   className="shadow-box"
                   style={{ width: "99.5%" }}
@@ -224,6 +242,7 @@ const ContentData = () => {
               </Col>
               <Col xs={12} sm={12} md={12} lg={12} xl={12}>
                 <Card
+                  loading={isLoading}
                   hoverable
                   className="shadow-box"
                   style={{ width: "99.5%" }}
@@ -240,6 +259,7 @@ const ContentData = () => {
               </Col>
               <Col xs={12} sm={12} md={12} lg={12} xl={12}>
                 <Card
+                  loading={isLoading}
                   hoverable
                   className="shadow-box"
                   style={{ width: "100%" }}
@@ -253,12 +273,10 @@ const ContentData = () => {
                         {" "}
                         Current Status:{" "}
                         <b style={{ color: "red" }}>
-                          {console.log(currentRow)}
                           {ledStatus ? `On` : `Off`}
                         </b>
                       </p>
                     </Col>
-                    {console.log(ledStatus ? `green` : `null`)}
                     <Col xs={5} sm={5} md={5} lg={5} xl={5}>
                       <Button
                         icon={<BulbFilled />}
@@ -272,6 +290,7 @@ const ContentData = () => {
               </Col>
               <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                 <Card
+                  loading={isLoading}
                   hoverable
                   className="shadow-box"
                   style={{ width: "100%" }}
@@ -286,14 +305,14 @@ const ContentData = () => {
             </Row>
           </Col>
           <Col xs={24} sm={24} md={24} lg={24} xl={15}>
-            <Card hoverable className="shadow-box">
+            <Card loading={isLoading} hoverable className="shadow-box">
               <DynamicMultiSeriesChart
                 temperature={temperature}
                 phLeveling={phLeveling}
                 tds={tds}
               />
             </Card>
-            <Card hoverable className="shadow-box">
+            <Card loading={isLoading} hoverable className="shadow-box">
               <Table
                 rowKey="_id"
                 dataSource={arrayTable}

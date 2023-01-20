@@ -6,7 +6,6 @@ var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 const SplineChart = (props) => {
   const { phLeveling, tds, temperature } = props;
-  console.log(phLeveling);
   const options = {
     animationEnabled: true,
     title: {
