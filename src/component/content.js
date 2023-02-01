@@ -124,11 +124,15 @@ const ContentData = () => {
             batteryData = batteryData.sort(
               (objA, objB) => Number(objA.x) - Number(objB.x)
             );
-            let currentBattery = parseInt(
-              (result[0].battery_percentage / 4.47) * 100
-            );
 
-            currentBattery = invlerp(3.96, 4.47, result[0].battery_percentage);
+            // var randomnumber =
+            //   Math.floor(Math.random() * (4.47 - 3.97 + 1)) + 3.97;
+            // console.log(randomnumber);
+            let currentBattery = invlerp(
+              3.96,
+              4.47,
+              result[0].battery_percentage
+            );
             currentBattery = (currentBattery * 100).toFixed(2);
 
             setValue(currentBattery);
