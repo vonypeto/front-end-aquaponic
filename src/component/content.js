@@ -32,7 +32,7 @@ const timeSince = (date) => {
 const ContentData = () => {
   const result = 6;
   const start = useState(0);
-  const [value, setValue] = useState(60);
+  const [value, setValue] = useState(0);
   const [arrayTable, setArrayTable] = useState([]);
   const [current, setCurrent] = useState(0);
   const [currentRow, setCurrentRow] = useState([]);
@@ -59,6 +59,8 @@ const ContentData = () => {
             currentRow.length === 1 &&
             currentRow[0].length === 0
           ) {
+            // Dear future developer i don't know what i did here :) and there seems to be a bug :D since its been a long time and god only knows
+            // this is for single array but since the arduino send multiple data before the web fetch this is not always called
             let currentDataRow = arrayTable;
             setCurrent(data.data_sensors?._id);
             currentDataRow.unshift(data.data_sensors);
@@ -66,8 +68,10 @@ const ContentData = () => {
             console.log("single data");
             console.log(currentDataRow);
             setArrayTable(currentDataRow);
+
             handleLoading();
           } else {
+            // Working for multiple array
             console.log("multiple single data");
 
             let newData = data?.data_sensors;
@@ -118,6 +122,11 @@ const ContentData = () => {
             batteryData = batteryData.sort(
               (objA, objB) => Number(objA.x) - Number(objB.x)
             );
+            let currentBattery = parseInt(
+              (result[0].battery_percentage / 4.47) * 100
+            );
+            setValue(currentBattery);
+            console.log(currentBattery);
             setPhLeveling(phLevelingData);
             setTds(tdsData);
             setTemperature(temperatureData);
