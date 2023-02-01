@@ -37,6 +37,8 @@ const ContentData = () => {
   const [current, setCurrent] = useState(0);
   const [currentRow, setCurrentRow] = useState([]);
   const [phLeveling, setPhLeveling] = useState([]);
+  const [battery, setBattery] = useState([]);
+
   const [tds, setTds] = useState([]);
   const [temperature, setTemperature] = useState([]);
   const [ledStatus, setLedStatus] = useState(false);
@@ -86,22 +88,41 @@ const ContentData = () => {
                 y: Number(data.ph_leveling),
               };
             });
-            setPhLeveling(phLevelingData);
+            phLevelingData = phLevelingData.sort(
+              (objA, objB) => Number(objA.x) - Number(objB.x)
+            );
             let tdsData = result.map((data, i) => {
               return {
                 x: new Date(data.createdAt),
                 y: Number(data.tds),
               };
             });
+            tdsData = tdsData.sort(
+              (objA, objB) => Number(objA.x) - Number(objB.x)
+            );
             let temperatureData = result.map((data, i) => {
               return {
                 x: new Date(data.createdAt),
                 y: Number(data.temperature),
               };
             });
+            temperatureData = temperatureData.sort(
+              (objA, objB) => Number(objA.x) - Number(objB.x)
+            );
+            let batteryData = result.map((data, i) => {
+              return {
+                x: new Date(data.createdAt),
+                y: Number(data.battery_percentage),
+              };
+            });
+            batteryData = batteryData.sort(
+              (objA, objB) => Number(objA.x) - Number(objB.x)
+            );
             setPhLeveling(phLevelingData);
             setTds(tdsData);
             setTemperature(temperatureData);
+            setBattery(batteryData);
+
             setCurrent(data.data_sensors[0]?._id);
             setCurrentRow(data.data_sensors[0]);
             setArrayTable(result);
@@ -116,6 +137,7 @@ const ContentData = () => {
       console.log(error);
     }
   };
+
   const handleLoading = () => {
     setIsLoading(false);
   };
@@ -146,6 +168,12 @@ const ContentData = () => {
       render: (_, elm) => <div>{elm.tds} PPM</div>,
     },
     {
+      title: "Battery",
+      dataIndex: "battery_percentage",
+      key: "battery_percentage",
+      render: (_, elm) => <div>{elm.battery_percentage} %</div>,
+    },
+    {
       title: "Date",
       dataIndex: "actions",
       render: (_, elm) => <div>{timeSince(elm.createdAt)}</div>,
@@ -154,6 +182,7 @@ const ContentData = () => {
   // useEffect(() => {
   //   getData();
   // });
+
   return (
     <div>
       <Content
@@ -208,7 +237,7 @@ const ContentData = () => {
                   hoverable
                   className="shadow-box"
                   style={{ width: "99.5%" }}
-                  cover={<img alt="example" src="/coral.png" />}
+                  cover={<img alt="example" src="/2.png" />}
                 >
                   <Meta title="Ph Leveling Sensor" />
                   <p className="mt-2">
@@ -226,7 +255,7 @@ const ContentData = () => {
                   hoverable
                   className="shadow-box"
                   style={{ width: "99.5%" }}
-                  cover={<img alt="example" src="/creature.png" />}
+                  cover={<img alt="example" src="/3.png" />}
                 >
                   <Meta title="Temperature Sensor" />
                   <p className="mt-2">
@@ -246,7 +275,7 @@ const ContentData = () => {
                   hoverable
                   className="shadow-box"
                   style={{ width: "99.5%" }}
-                  cover={<img alt="example" src="/tds.png" />}
+                  cover={<img alt="example" src="/1.png" />}
                 >
                   <Meta title="TDS Sensor" />
                   <p className="mt-2">
@@ -263,7 +292,7 @@ const ContentData = () => {
                   hoverable
                   className="shadow-box"
                   style={{ width: "100%" }}
-                  cover={<img alt="example" src="/bulb.jpg" />}
+                  cover={<img alt="example" src="/4.png" />}
                 >
                   <Meta title="UV Light" />
 
@@ -310,6 +339,7 @@ const ContentData = () => {
                 temperature={temperature}
                 phLeveling={phLeveling}
                 tds={tds}
+                battery={battery}
               />
             </Card>
             <Card loading={isLoading} hoverable className="shadow-box">
