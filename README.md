@@ -2,7 +2,7 @@
 
 ### Indoor Solar powered aquaponic system for ornamental fish and hydroponic plants (PROJECT)
 
-[![IoT](https://raw.githubusercontent.com/Locality-PH/cpu_scheduler/main/src/screenshot/screenshot.jpg)](#)
+[![IoT](https://raw.githubusercontent.com/vonypeto/front-end-aquaponic/main/src/screenshot/screenshot.jpg)](#)
 
 An IoT Aquaponic powered by solar energy
 
