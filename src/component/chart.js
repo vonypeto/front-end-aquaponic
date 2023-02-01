@@ -58,7 +58,7 @@ const SplineChart = (props) => {
           TDS
         </Tag>
         <Tag color="blue" className="rounded">
-          Ph Leveling
+          pH Leveling
         </Tag>
         <Tag color="yellow" className="rounded">
           Battery

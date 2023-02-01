@@ -146,7 +146,7 @@ const ContentData = () => {
   }, 7500);
   const columns = [
     {
-      title: "Ph Leveling",
+      title: "pH Leveling",
       dataIndex: "ph_leveling",
       key: "ph_leveling",
       render: (_, elm) => <div>{elm.ph_leveling} pH</div>,
@@ -239,7 +239,7 @@ const ContentData = () => {
                   style={{ width: "99.5%" }}
                   cover={<img alt="example" src="/2.png" />}
                 >
-                  <Meta title="Ph Leveling Sensor" />
+                  <Meta title="pH Leveling Sensor" />
                   <p className="mt-2">
                     <b style={{ color: "red" }}>{currentRow?.ph_leveling} pH</b>{" "}
                     from{" "}
