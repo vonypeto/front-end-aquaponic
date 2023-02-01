@@ -44,6 +44,8 @@ const ContentData = () => {
   const [ledStatus, setLedStatus] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  const clamp = (a, min = 0, max = 1) => Math.min(max, Math.max(min, a));
+  const invlerp = (x, y, a) => clamp((a - x) / (y - x));
   const getData = async (handleLoading) => {
     try {
       axios.get(`/api/get_data?result=${6}&start=${0}`).then((res) => {
@@ -125,6 +127,10 @@ const ContentData = () => {
             let currentBattery = parseInt(
               (result[0].battery_percentage / 4.47) * 100
             );
+
+            currentBattery = invlerp(3.96, 4.47, result[0].battery_percentage);
+            currentBattery = (currentBattery * 100).toFixed(2);
+
             setValue(currentBattery);
             console.log(currentBattery);
             setPhLeveling(phLevelingData);
