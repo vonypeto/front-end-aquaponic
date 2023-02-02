@@ -118,7 +118,7 @@ const ContentData = () => {
             let batteryData = result.map((data, i) => {
               return {
                 x: new Date(data.createdAt),
-                y: Number(data.battery_percentage),
+                y: Number(data?.battery_percentage),
               };
             });
             batteryData = batteryData.sort(
@@ -131,7 +131,7 @@ const ContentData = () => {
             let currentBattery = invlerp(
               3.96,
               4.47,
-              result[0].battery_percentage
+              result[0]?.battery_percentage
             );
             currentBattery = (currentBattery * 100).toFixed(2);
 
