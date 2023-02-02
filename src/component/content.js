@@ -142,8 +142,12 @@ const ContentData = () => {
             setTemperature(temperatureData);
             setBattery(batteryData);
 
+            result = result.sort(
+              (objA, objB) => Number(objA.createdAt) - Number(objB.createdAt)
+            );
             setCurrent(data.data_sensors[0]?._id);
             setCurrentRow(data.data_sensors[0]);
+
             setArrayTable(result);
             handleLoading();
           }
