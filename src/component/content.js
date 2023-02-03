@@ -131,7 +131,7 @@ const ContentData = () => {
             let currentBattery = invlerp(
               3.96,
               4.47,
-              result[0]?.battery_percentage
+              result[0]?.battery_percentage || 0
             );
             currentBattery = (currentBattery * 100).toFixed(2);
 
@@ -194,7 +194,11 @@ const ContentData = () => {
       title: "Battery",
       dataIndex: "battery_percentage",
       key: "battery_percentage",
-      render: (_, elm) => <div>{elm.battery_percentage} %</div>,
+      render: (_, elm) => (
+        <div>
+          {elm.battery_percentage} {String.fromCharCode(8487)}
+        </div>
+      ),
     },
     {
       title: "Date",
