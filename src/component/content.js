@@ -61,7 +61,8 @@ const ContentData = () => {
             currentRow.length === 1 &&
             currentRow[0].length === 0
           ) {
-            // Dear future developer i don't know what i did here :) and there seems to be a bug :D since its been a long time and god only knows
+            // Dear future developer i don't know what i did here :) and there seems to be a bug :D since its been a long time and god only knows, create a fake data for a single array so that this can be bypass
+            // on the request.rest file I think :D
             // this is for single array but since the arduino send multiple data before the web fetch this is not always called
             let currentDataRow = arrayTable;
             setCurrent(data.data_sensors?._id);
