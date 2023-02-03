@@ -128,10 +128,14 @@ const ContentData = () => {
             // var randomnumber =
             //   Math.floor(Math.random() * (4.47 - 3.97 + 1)) + 3.97;
             // console.log(randomnumber);
+            result = result.sort(
+              (objA, objB) => Number(objA.createdAt) - Number(objB.createdAt)
+            );
+            console.log(result[0]?.battery_percentage);
             let currentBattery = invlerp(
               3.96,
               4.47,
-              result[0]?.battery_percentage || 0
+              result[result.length - 1]?.battery_percentage || 0
             );
             currentBattery = (currentBattery * 100).toFixed(2);
 
@@ -142,9 +146,6 @@ const ContentData = () => {
             setTemperature(temperatureData);
             setBattery(batteryData);
 
-            result = result.sort(
-              (objA, objB) => Number(objA.createdAt) - Number(objB.createdAt)
-            );
             setCurrent(data.data_sensors[0]?._id);
             setCurrentRow(data.data_sensors[0]);
 
