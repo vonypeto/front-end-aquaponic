@@ -7,12 +7,12 @@ const { Header } = Layout;
 const header = () => {
   return (
     <Header theme="light">
-      <div className="w-100 text-center head-center">
+      <div className="w-100 text-center head-center ">
         <div className="text-center">
           <h1>
             Indoor Solar-Powered Aquaponics System for Ornamental Fish and
             Hydroponic Plants
-          </h1>{" "}
+          </h1>
           <br />
         </div>
       </div>
