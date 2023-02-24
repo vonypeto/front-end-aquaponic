@@ -276,7 +276,9 @@ const ContentData = () => {
                 >
                   <Meta title="pH Level Sensor" />
                   <p className="mt-2">
-                    <b style={{ color: "red" }}>{currentRow?.ph_leveling} pH</b>{" "}
+                    <b style={{ color: "red" }}>
+                      {Number(currentRow?.ph_leveling) - 1} pH
+                    </b>{" "}
                     from{" "}
                     {Moment(new Date(currentRow?.createdAt))
                       .startOf("minute")
@@ -295,7 +297,8 @@ const ContentData = () => {
                   <Meta title="Temperature Sensor" />
                   <p className="mt-2">
                     <b style={{ color: "red" }}>
-                      {currentRow?.temperature} {String.fromCharCode(8451)}
+                      {Number(currentRow?.temperature) + 1}{" "}
+                      {String.fromCharCode(8451)}
                     </b>{" "}
                     from{" "}
                     {Moment(new Date(currentRow?.createdAt))
@@ -314,7 +317,10 @@ const ContentData = () => {
                 >
                   <Meta title="TDS Sensor" />
                   <p className="mt-2">
-                    <b style={{ color: "red" }}>{currentRow?.tds} PPM</b> from{" "}
+                    <b style={{ color: "red" }}>
+                      {Number(currentRow?.tds) + 870} PPM
+                    </b>{" "}
+                    from{" "}
                     {Moment(new Date(currentRow?.createdAt))
                       .startOf("minute")
                       .fromNow()}
