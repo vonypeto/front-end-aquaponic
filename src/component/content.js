@@ -135,7 +135,7 @@ const ContentData = () => {
             //   Math.floor(Math.random() * (4.47 - 3.97 + 1)) + 3.97;
             // console.log(randomnumber);
             result = result.sort(
-              (objA, objB) => Number(objA.createdAt) - Number(objB.createdAt)
+              (objA, objB) => Number(objB.createdAt) - Number(objA.createdAt)
             );
             console.log(result[0]?.battery_percentage);
             let currentBattery = invlerp(
