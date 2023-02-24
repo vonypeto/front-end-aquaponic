@@ -140,7 +140,7 @@ const ContentData = () => {
             console.log(result[0]?.battery_percentage);
             let currentBattery = invlerp(
               3.96,
-              4.6,
+              4.77,
               result[result.length - 1]?.battery_percentage || 0
             );
             currentBattery = (currentBattery * 100).toFixed(2);
@@ -203,7 +203,8 @@ const ContentData = () => {
       key: "battery_percentage",
       render: (_, elm) => (
         <div>
-          {(invlerp(3.96, 4.6, elm.battery_percentage || 0) * 100).toFixed(2)} %
+          {(invlerp(3.96, 4.77, elm.battery_percentage || 0) * 100).toFixed(2)}{" "}
+          %
         </div>
       ),
     },
