@@ -11,7 +11,7 @@ const SplineChart = (props) => {
   const options = {
     animationEnabled: true,
     title: {
-      text: "AQUAPONIC CHART MAP ",
+      text: "AQUAPONIC SYSTEM CHART MAP",
     },
     axisX: {
       valueFormatString: "MMM",
