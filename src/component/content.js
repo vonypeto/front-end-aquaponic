@@ -30,7 +30,7 @@ const timeSince = (date) => {
   return formatDate;
 };
 const ContentData = () => {
-  const result = 6;
+  const result = 12;
   const start = useState(0);
   const [value, setValue] = useState(0);
   const [arrayTable, setArrayTable] = useState([]);
@@ -53,7 +53,7 @@ const ContentData = () => {
   const invlerp = (x, y, a) => clamp((a - x) / (y - x));
   const getData = async (handleLoading) => {
     try {
-      axios.get(`/api/get_data?result=${6}&start=${0}`).then((res) => {
+      axios.get(`/api/get_data?result=${12}&start=${0}`).then((res) => {
         const data = JSON.parse(res.data);
         console.log(data);
         setLedStatus(data?.led_status);
