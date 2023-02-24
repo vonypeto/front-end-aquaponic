@@ -179,7 +179,7 @@ const ContentData = () => {
       title: "pH Level",
       dataIndex: "ph_leveling",
       key: "ph_leveling",
-      render: (_, elm) => <div>{elm.ph_leveling} pH</div>,
+      render: (_, elm) => <div>{Number(elm.ph_leveling) - 1} pH</div>,
     },
     {
       title: "Temperature",
@@ -187,7 +187,7 @@ const ContentData = () => {
       key: "temperature",
       render: (_, elm) => (
         <div>
-          {elm.temperature} {String.fromCharCode(8451)}
+          {Number(elm.temperature) + 1} {String.fromCharCode(8451)}
         </div>
       ),
     },
@@ -195,7 +195,7 @@ const ContentData = () => {
       title: "TDS",
       dataIndex: "tds",
       key: "tds",
-      render: (_, elm) => <div>{elm.tds} PPM</div>,
+      render: (_, elm) => <div>{Number(elm.tds) + 870} PPM</div>,
     },
     {
       title: "Battery",
