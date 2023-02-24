@@ -38,11 +38,16 @@ const ContentData = () => {
   const [currentRow, setCurrentRow] = useState([]);
   const [phLeveling, setPhLeveling] = useState([]);
   const [battery, setBattery] = useState([]);
-
   const [tds, setTds] = useState([]);
   const [temperature, setTemperature] = useState([]);
   const [ledStatus, setLedStatus] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isChecked, setIsChecked] = useState({
+    phLeveling: true,
+    temperature: true,
+    tds: true,
+    battery: true,
+  });
 
   const clamp = (a, min = 0, max = 1) => Math.min(max, Math.max(min, a));
   const invlerp = (x, y, a) => clamp((a - x) / (y - x));
@@ -92,7 +97,7 @@ const ContentData = () => {
             let phLevelingData = result.map((data, i) => {
               return {
                 x: new Date(data.createdAt),
-                y: Number(data.ph_leveling),
+                y: Number(data.ph_leveling) - 1,
               };
             });
             phLevelingData = phLevelingData.sort(
@@ -101,7 +106,7 @@ const ContentData = () => {
             let tdsData = result.map((data, i) => {
               return {
                 x: new Date(data.createdAt),
-                y: Number(data.tds),
+                y: Number(data.tds) + 870,
               };
             });
             tdsData = tdsData.sort(
@@ -110,7 +115,7 @@ const ContentData = () => {
             let temperatureData = result.map((data, i) => {
               return {
                 x: new Date(data.createdAt),
-                y: Number(data.temperature),
+                y: Number(data.temperature) + 1,
               };
             });
             temperatureData = temperatureData.sort(
@@ -135,7 +140,7 @@ const ContentData = () => {
             console.log(result[0]?.battery_percentage);
             let currentBattery = invlerp(
               3.96,
-              4.47,
+              4.6,
               result[result.length - 1]?.battery_percentage || 0
             );
             currentBattery = (currentBattery * 100).toFixed(2);
@@ -171,7 +176,7 @@ const ContentData = () => {
   }, 7500);
   const columns = [
     {
-      title: "pH Leveling",
+      title: "pH Level",
       dataIndex: "ph_leveling",
       key: "ph_leveling",
       render: (_, elm) => <div>{elm.ph_leveling} pH</div>,
@@ -198,7 +203,7 @@ const ContentData = () => {
       key: "battery_percentage",
       render: (_, elm) => (
         <div>
-          {elm.battery_percentage} {String.fromCharCode(8487)}
+          {(invlerp(3.96, 4.6, elm.battery_percentage || 0) * 100).toFixed(2)} %
         </div>
       ),
     },
@@ -268,7 +273,7 @@ const ContentData = () => {
                   style={{ width: "99.5%" }}
                   cover={<img alt="example" src="/2.png" />}
                 >
-                  <Meta title="pH Leveling Sensor" />
+                  <Meta title="pH Level Sensor" />
                   <p className="mt-2">
                     <b style={{ color: "red" }}>{currentRow?.ph_leveling} pH</b>{" "}
                     from{" "}
@@ -369,6 +374,8 @@ const ContentData = () => {
                 phLeveling={phLeveling}
                 tds={tds}
                 battery={battery}
+                isChecked={isChecked}
+                setIsChecked={setIsChecked}
               />
             </Card>
             <Card loading={isLoading} hoverable className="shadow-box">
